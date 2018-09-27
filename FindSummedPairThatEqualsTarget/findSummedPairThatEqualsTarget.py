@@ -2,6 +2,7 @@
 # that equals the integer. If no pair exists return false otherwise false.
  
 import matplotlib.pyplot as plt
+import numpy as np
 import random, time
 
 POPULATION = 2000
@@ -35,11 +36,11 @@ def main():
         linearOut = time.time() - linearIn
 
         x_quad.append(n)
-        y_quad.append(quadOut*10**4) # to provide y axis with some meaningful values
+        y_quad.append(quadOut*10**3) # y axis to milliseconds
         x_log.append(n)
-        y_log.append(logOut*10**4)
+        y_log.append(logOut*10**3)
         x_linear.append(n)
-        y_linear.append(linearOut*10**4)
+        y_linear.append(linearOut*10**3)
 
     fig, ax = plt.subplots()
 
@@ -47,7 +48,9 @@ def main():
     ax.plot(x_log, y_log)
     ax.plot(x_linear, y_linear)
 
-    ax.set(xlabel="n", ylabel="Time", title="Asymptotic Analysis")
+    plt.yticks(np.arange(0, y_quad[-1], step=0.5))
+    ax.set(xlabel="n", ylabel="time (ms)", title="Asymptotic Analysis")
+
     ax.grid()
     fig.savefig("timeComplexityAnalysis.png")
     plt.show()

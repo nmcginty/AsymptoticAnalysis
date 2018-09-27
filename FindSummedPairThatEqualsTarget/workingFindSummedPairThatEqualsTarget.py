@@ -2,6 +2,7 @@
 # that equals the integer. If no pair exists return false otherwise false.
  
 import matplotlib.pyplot as plt
+import numpy as np
 import random, time
 
 POPULATION = 2000
@@ -24,9 +25,11 @@ def main():
 
     x_quad, y_quad, x_log, y_log, x_linear, y_linear = ([] for x in range(6))
 
+
+    # find a better way to record time... and store x,y coordinates
+    sequence = [random.randint(0, POPULATION)]
+    # sequence = random.sample(range(POPULATION), n)
     for n in range(SAMPLE):
-        sequence = random.sample(range(POPULATION), n)
-        sequence.sort()
 
         quadIn = time.time()
         quadraticSolution(sequence, target)
@@ -41,13 +44,16 @@ def main():
         linearOut = time.time() - linearIn
 
         x_quad.append(n)
-        y_quad.append(quadOut*10**4) # to provide y axis with some meaningful values
+        y_quad.append(quadOut*10**3) # y axis into microiseconds
         x_log.append(n)
-        y_log.append(logOut*10**4)
+        y_log.append(logOut*10**3) 
         x_linear.append(n)
-        y_linear.append(linearOut*10**4)
+        y_linear.append(linearOut*10**3)
+
+        sequence.append(random.randint(0, POPULATION))
 
     # print("Quadratic Time: ", quadOut)
+        sequence.sort()
     # print("n*log(n) Time: ", logOut)
     # print("Linear Time: ", linearOut)
     fig, ax = plt.subplots()
@@ -55,13 +61,16 @@ def main():
     # ax.plot((0, POPULATION), (0, quadOut*1000))
     # ax.plot((0, POPULATION), (0, logOut*1000))
     # ax.plot((0, POPULATION), (0, linearOut*1000))
-    ax.plot(x_quad, y_quad)
-    ax.plot(x_log, y_log)
-    ax.plot(x_linear, y_linear)
+    ax.plot(x_quad, y_quad, label="quadratic")
+    ax.plot(x_log, y_log, label="n*log(n)")
+    ax.plot(x_linear, y_linear, label="linear")
 
-    ax.set(xlabel="n", ylabel="Time", title="Asymptotic Analysis")
+    plt.yticks(np.arange(0, y_quad[-1], step=0.5))
+
+    ax.set(xlabel="n", ylabel="time (ms)", title="Asymptotic Analysis")
     ax.grid()
     fig.savefig("timeComplexityAnalysis.png")
+    plt.legend()
     plt.show()
     print("\n")
 
