@@ -15,6 +15,12 @@ target = POPULATION // 2
 def main():
 
     print("\n")
+    
+    # sequence = random.sample(range(POPULATION), SAMPLE)
+    # sequence.sort()
+    # target = random.randint(POPULATION//2, POPULATION)
+    # print("Sequence size:", len(sequence))
+    # print("Target:", target)
 
     x_quad, y_quad, x_log, y_log, x_linear, y_linear = ([] for x in range(6))
 
@@ -41,8 +47,14 @@ def main():
         x_linear.append(n)
         y_linear.append(linearOut*10**4)
 
+    # print("Quadratic Time: ", quadOut)
+    # print("n*log(n) Time: ", logOut)
+    # print("Linear Time: ", linearOut)
     fig, ax = plt.subplots()
 
+    # ax.plot((0, POPULATION), (0, quadOut*1000))
+    # ax.plot((0, POPULATION), (0, logOut*1000))
+    # ax.plot((0, POPULATION), (0, linearOut*1000))
     ax.plot(x_quad, y_quad)
     ax.plot(x_log, y_log)
     ax.plot(x_linear, y_linear)
@@ -53,14 +65,15 @@ def main():
     plt.show()
     print("\n")
 
-# just really slow... 
+
 def quadraticSolution(sequence, target): 
     
     pairs = [(x, y) for x in sequence for y in sequence if(x+y == target)]    
+    # print("Pairs O(n^2):\t   ", pairs)
 
-# uses binary search to locate complement of number if it exist
-# allows single iteration of the list but a cost of log(n) for each n 
-# due to binarysearch call
+    # pairsBool = any([(x + y == target) for x in sequence for y in sequence])
+    # print("pairsBOOL ", pairsBool)
+
 def nLogNSolution(sequence, target):
     
     pairs = [] 
@@ -70,9 +83,19 @@ def nLogNSolution(sequence, target):
             complement = sequence[index]
             pairs.append((x, complement))
 
+        # checking whether x <= target improves performance overall but gives odd osciliation   
+        # as target is closer towards population this check becomes less cost saving
+        # this check can only be made if we assume the list cannot contain negative numbers
+        # which is most cases it probably could
+        # if(x <= target):
+        #     index = binarysearch(sequence, target - x)
+        #     if(index is not None):
+        #         complement = sequence[index]
+        #         pairs.append((x, complement))
+    
+    # print("Pairs O(n*log(n)): ", pairs)
 
-# bi-directional search, two indexes at first and last element
-# check some of elements at left/right index, move accordingly
+# bi-directional search
 def linearSolution(sequence, target):
     pairs = []
     left, right = 0, len(sequence) - 1
@@ -81,11 +104,13 @@ def linearSolution(sequence, target):
         l, r = sequence[left], sequence[right]
         if l + r  == target:
             pairs.append((l, r))
-            left += 1   
+            left += 1           # does it matter what moves here?? leaning towards no... a TODO
         elif l + r < target:    # left is too small
             left += 1           
         else:                   # right is too large
             right -= 1
+
+    # print("Pairs O(n):\t   ", pairs + [(y, x) for x, y in pairs])
 
 # returns index if target exists in sequence otherwise returns None, takes log(n)
 def binarysearch(sequence, target):
@@ -99,5 +124,6 @@ def binarysearch(sequence, target):
         else:
             return mid
     return None
+
 
 main()
