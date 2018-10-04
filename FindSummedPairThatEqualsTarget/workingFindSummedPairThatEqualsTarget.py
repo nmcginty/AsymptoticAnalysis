@@ -69,14 +69,14 @@ def main():
 
     ax.set(xlabel="n", ylabel="time (ms)", title="Asymptotic Analysis")
     ax.grid()
-    fig.savefig("timeComplexityAnalysis.png")
     plt.legend()
+    fig.savefig("timeComplexityAnalysis.png")
+    fig.savefig("workingTimeComplexityAnalysis.png")
     plt.show()
     print("\n")
 
 
 def quadraticSolution(sequence, target): 
-    
     pairs = [(x, y) for x in sequence for y in sequence if(x+y == target)]    
     # print("Pairs O(n^2):\t   ", pairs)
 
